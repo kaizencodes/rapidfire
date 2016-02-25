@@ -13,7 +13,7 @@ module Rapidfire
         results =
           case question
           when Rapidfire::Questions::Select, Rapidfire::Questions::Radio,
-            Rapidfire::Questions::Checkbox
+            Rapidfire::Questions::Checkbox, Rapidfire::Questions::Rating
             answers = question.answers.map(&:answer_text).map do |text|
               text.to_s.split(Rapidfire.answers_delimiter)
             end.flatten

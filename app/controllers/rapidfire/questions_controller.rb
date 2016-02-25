@@ -6,7 +6,7 @@ module Rapidfire
     before_filter :find_question!, :only => [:edit, :update, :destroy]
 
     def index
-      @questions = @question_group.questions
+      @questions = @question_group.questions.no_rating
     end
 
     def new

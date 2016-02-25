@@ -3,7 +3,8 @@ module Rapidfire
     belongs_to :question_group, :inverse_of => :questions
     has_many   :answers
 
-    default_scope { order(:position) }
+    default_scope { order('coalesce(position, 0) DESC') }
+    scope :no_rating, -> {where.not(type: 'Rapidfire::Questions::Rating')}
 
     validates :question_group, :question_text, :presence => true
     serialize :validation_rules
