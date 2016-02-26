@@ -38,7 +38,32 @@ module Rapidfire
     def results
       @question_group = QuestionGroup.find(params[:id])
       @question_group_results =
-        QuestionGroupResults.new(question_group: @question_group).extract
+        QuestionGroupResults.new(question_group: @question_group).summary
+
+      respond_to do |format|
+        format.json { render json: @question_group_results, root: false }
+        format.html
+        format.js
+      end
+    end
+
+    def detailed
+      @question_group = QuestionGroup.find(params[:id])
+      @question_group_results =
+        QuestionGroupResults.new(question_group: @question_group).detailed
+
+      respond_to do |format|
+        format.json { render json: @question_group_results, root: false }
+        format.html
+        format.js
+        format.csv {send_data Exports::QuestionResultExporter.new(question_group: @question_group).detailed, filename: "Detailed export of #{@question_group.name} at #{Time.now}.csv" }
+      end
+    end
+
+    def result_of_user
+      @question_group = QuestionGroup.find(params[:id])
+      @question_group_results =
+        QuestionGroupResults.new(question_group: @question_group, user: current_user).of_user
 
       respond_to do |format|
         format.json { render json: @question_group_results, root: false }
